@@ -106,7 +106,7 @@ std::string get_method_modifier(uint16_t flags) {
     return outPut.str();
 }
 
-std::string dump_method(Il2CppClass *klass) {
+std::string dump_method(Il2CppClass * klass) {
     std::stringstream outPut;
     if (klass->method_count > 0) {
         outPut << "\n\t// Methods\n";
@@ -167,7 +167,7 @@ std::string dump_method(Il2CppClass *klass) {
     return outPut.str();
 }
 
-std::string dump_property(Il2CppClass *klass) {
+std::string dump_property(Il2CppClass * klass) {
     std::stringstream outPut;
     if (klass->property_count > 0) {
         outPut << "\n\t// Properties\n";
@@ -175,7 +175,7 @@ std::string dump_property(Il2CppClass *klass) {
         while (auto prop = il2cpp_class_get_properties(klass, &iter)) {
             //TODO attribute
             outPut << "\t";
-            Il2CppClass *prop_class = nullptr;
+            Il2CppClass * prop_class = nullptr;
             if (prop->get) {
                 outPut << get_method_modifier(prop->get->flags);
                 prop_class = il2cpp_class_from_type(prop->get->return_type);
@@ -196,7 +196,7 @@ std::string dump_property(Il2CppClass *klass) {
     return outPut.str();
 }
 
-std::string dump_field(Il2CppClass *klass) {
+std::string dump_field(Il2CppClass * klass) {
     std::stringstream outPut;
     if (klass->field_count > 0) {
         outPut << "\n\t// Fields\n";
@@ -308,7 +308,11 @@ std::string dump_type(const Il2CppType *type) {
             outPut << ", " << extends[i];
         }
     }
+#ifdef VersionAbove2020V2
+    outPut << " // TypeDefIndex: " << type->data.__klassIndex << "\n{";
+#else
     outPut << " // TypeDefIndex: " << type->data.klassIndex << "\n{";
+#endif
     outPut << dump_field(klass);
     outPut << dump_property(klass);
     outPut << dump_method(klass);
@@ -336,7 +340,12 @@ void il2cpp_dump(void *handle, char *outDir) {
     for (int i = 0; i < size; ++i) {
         auto image = il2cpp_assembly_get_image(assemblies[i]);
         typeDefinitionsCount += image->typeCount;
+#ifdef VersionAbove2020V2
+        imageOutput << "// Image " << i << ": " << image->name << " - "
+                    << image->assembly->referencedAssemblyStart << "\n";
+#else
         imageOutput << "// Image " << i << ": " << image->name << " - " << image->typeStart << "\n";
+#endif
     }
     std::vector<std::string> outPuts(typeDefinitionsCount);
     LOGI("typeDefinitionsCount: %i", typeDefinitionsCount);
@@ -351,7 +360,11 @@ void il2cpp_dump(void *handle, char *outDir) {
             auto klass = il2cpp_image_get_class(image, j);
             auto type = il2cpp_class_get_type(const_cast<Il2CppClass *>(klass));
             //LOGD("type name : %s", il2cpp_type_get_name(type));
+#ifdef VersionAbove2020V2
+            auto klassIndex = type->data.__klassIndex;
+#else
             auto klassIndex = type->data.klassIndex;
+#endif
             if (outPuts[klassIndex].empty()) {
                 outPuts[klassIndex] = dump_type(type);
             }

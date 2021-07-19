@@ -670,7 +670,7 @@ typedef struct Il2CppType
     union
     {
         void* dummy;
-        TypeDefinitionIndex __klassIndex;
+        TypeDefinitionIndex klassIndex;
         Il2CppMetadataTypeHandle typeHandle;
         const Il2CppType *type;
         Il2CppArrayType *array;

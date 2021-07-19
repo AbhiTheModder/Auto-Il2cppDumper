@@ -6,10 +6,14 @@
 #define RIRU_IL2CPPDUMPER_IL2CPP_H
 
 
-#define UnityVersion 2019.3.7f1
+#define UnityVersion 2020.2.0f1
 
 // 2018.3.0f2(v24.1) and up enable it
 #define VersionAboveV24
+
+// 2020.2.0f1 and up enable it
+#define VersionAbove2020V2
+
 #define STR(x) #x
 #define STRINGIFY_MACRO(x) STR(x)
 #define EXPAND(x) x
