@@ -6,6 +6,11 @@ hope this will help you >::<
 This project is modifying version of [Riru-Il2cppDumper](https://github.com/Perfare/Riru-Il2CppDumper) <br />
 Credit : [Perfare](https://github.com/Perfare)
 
+# Changelog Update
+- Fix error in version 2020.2.0f1 and up
+- Migrate from kotlin -> java
+- Migrate from cmake-build -> ndk-build [enhancement from #1]
+
 # Usage 
 - change unity version in Includes/il2cpp_dump.h with your game unity version
 - if the unity version is 2018.3.0f2 and above please define VersionAboveV24
